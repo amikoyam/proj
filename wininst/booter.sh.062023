@@ -1,0 +1,31 @@
+#!/usr/bin/bash
+# 
+# This script will install ISO file on available USB stick
+# 
+workd=`pwd`
+
+# lnct=`lsblk -do PATH,SUBSYSTEMS,SIZE | grep usb | wc -l`
+result=`lsblk -do PATH,SUBSYSTEMS,SIZE | grep usb`
+lnct=`ls -l | wc -l`
+if [ $lnct -lt 1 ]; then
+  echo "no USB device"
+  exit 1
+fi
+
+if [ $lnct -eq 1 ]; then
+  line=`lsblk -do PATH,SUBSYSTEMS,SIZE | grep usb`
+fi
+
+if [ $lnct -gt 1 ]; then
+  index=1
+#   lsblk -do PATH,SUBSYSTEMS,SIZE | grep usb | while read line; do
+#   ls -l | grep -v total | while IFS='$\n' read -r line; do
+    echo "${index}. - $line"
+    array+=("$line")
+    let "index = $index + 1"
+  done
+  echo "Please, select the number from the above menu: "
+  read resp
+
+fi
+echo $line

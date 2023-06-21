@@ -1,0 +1,28 @@
+#!/usr/bin/python3
+
+import sys
+import re
+import subprocess
+
+lsblk = subprocess.run(['lsblk', '-do', 'PATH,SUBSYSTEMS,SIZE'], check=True, capture_output=True)
+usbln = subprocess.run(['grep', '-e', '"usb|PATH"'], input=lsblk.stdout, capture_output=True, shell=True)
+# out = str(lsblk.stdout).split("\\n")
+out = str(usbln.stdout).split("\\n")
+lnc = len(out)-1
+print (out)
+print (lnc)
+
+if lnc < 2:
+  print ("there is no USB device detected on the OS")
+  exit(1)
+if lnc > 2:
+  print ("there are more than 1 USB drives.")
+#   print(*out, sep = "\n")
+  count = 0
+  for line in out:
+    if count != 0 and count < lnc:
+      print (str(count)+". "+line)
+    count+=1
+  
+  resp = input ("Please, select one: ")
+
